@@ -16,5 +16,5 @@ jobs:
             - name: Build website
               run: |
                   sed -i 's|BASE_URL|${{ vars.BASE_URL }}|g' hugo.yaml
-                  sudo snap install -y hugo
+                  sudo snap install hugo
                   hugo version
