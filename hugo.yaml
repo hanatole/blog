@@ -1,4 +1,4 @@
-baseURL: https://example.org/
+baseURL: BASE_URL
 languageCode: en-us
 title: Bitenoises
 theme: PaperMod

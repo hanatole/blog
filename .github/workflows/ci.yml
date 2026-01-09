@@ -15,4 +15,7 @@ jobs:
 
             - name: Build website
               run: |
-                  ls -lha themes/
+                  sed -i 's|BASE_URL|${{ vars.BASE_URL }}|g' hugo.yaml
+                  echo "$(<hugo.yaml)"
+                  apt-get install -y hugo
+                  hugo version
