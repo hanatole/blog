@@ -7,14 +7,30 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
-
+        outputs:
+            image: ${{ steps.image_tag.outputs.image }}
         steps:
             - uses: actions/checkout@v6.0.1
               with:
                   submodules: "true"
 
-            - name: Build website
+            - name: Publish blog
               run: |
                   sed -i 's|BASE_URL|${{ vars.BASE_URL }}|g' hugo.yaml
                   sudo snap install hugo
-                  hugo version
+                  hugo
+
+            - name: Build Docker image
+              id: image_tag
+              run: |
+                  echo "image=blog:${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
+                  docker build -t blog:${GITHUB_SHA::7} .
+                  docker images | grep blog
+
+    deploy:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Deploy to Server
+              run: |
+                  echo "Deploying image ${{ needs.build.outputs.image }} to server..."
