@@ -15,4 +15,4 @@ jobs:
 
             - name: Build website
               run: |
-                  ls -lha
+                  ls -lha thems/
