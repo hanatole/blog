@@ -3,12 +3,12 @@ on:
     push:
         branches:
             - main
+env:
+    image_tag: ${{secrets.REGISTRY_USER}}/blog
 
 jobs:
     build:
         runs-on: ubuntu-latest
-        outputs:
-            image: ${{ steps.image_tag.outputs.image }}
         steps:
             - uses: actions/checkout@v6.0.1
               with:
@@ -23,9 +23,11 @@ jobs:
             - name: Build Docker image
               id: image_tag
               run: |
-                  echo "image=blog:${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
-                  docker build -t blog:${GITHUB_SHA::7} .
-                  docker images | grep blog
+                  docker build -t ${{ env.image_tag }} -t ${{ env.image_tag }}/${GITHUB_SHA::7} .
+            - name: Push Docker image
+              run: |
+                  docker login -u ${{secrets.REGISTRY_USER}} -p ${{secrets.ACCESS_TOKEN}}
+                  docker push --all-tags ${{ env.image_tag }}
 
     deploy:
         needs: build
@@ -33,4 +35,4 @@ jobs:
         steps:
             - name: Deploy to Server
               run: |
-                  echo "Deploying image ${{ needs.build.outputs.image }} to server..."
+                  echo "Deploying image ${{ env.image_tag }} to server..."
