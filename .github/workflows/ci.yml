@@ -1,13 +1,8 @@
 name: Continuous Integration
 on:
-    pull_request:
-        branches:
-            - main
     push:
         branches:
             - main
-
-    workflow_dispatch:
 
 jobs:
     build:
@@ -32,8 +27,6 @@ jobs:
             - name: Build blog and package Docker image
               run: |
                   hugo
-                  ls -lha public/
-                  test -f public/index.html
                   docker build -t ${{ steps.meta.outputs.image_tag }} .
 
             - name: Push Docker image
