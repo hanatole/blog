@@ -1,4 +1,4 @@
-baseURL: BASE_URL
+baseURL: "/"
 languageCode: en-us
 title: Bitenoises
 theme: PaperMod

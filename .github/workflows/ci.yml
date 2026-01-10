@@ -16,7 +16,6 @@ jobs:
 
             - name: Publish blog
               run: |
-                  sed -i 's|BASE_URL|${{ vars.BASE_URL }}|g' hugo.yaml
                   sudo snap install hugo
                   hugo
 
