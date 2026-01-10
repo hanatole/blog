@@ -29,7 +29,7 @@ jobs:
 
     deploy:
         needs: build
-        uses: hanatole/deployment/.github/workflows/ci.yml@main
+        uses: hanatole/deployment/.github/workflows/cd.yml@main
         with:
             service_name: blog
             docker_image: ${{ needs.build.outputs.image_tag }}
