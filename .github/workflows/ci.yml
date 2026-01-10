@@ -3,37 +3,34 @@ on:
     pull_request:
         branches:
             - main
-env:
-    image_tag: ${{vars.REGISTRY_USER}}/blog
+    push:
+        branches:
+            - main
 
 jobs:
     build:
         runs-on: ubuntu-latest
+        outputs:
+            image_tag: ${{ steps.meta.outputs.image_tag }}
         steps:
             - uses: actions/checkout@v6.0.1
-              with:
-                  submodules: "true"
 
-            - name: Publish blog
-              env:
-                  HUGO_ENVIRONMENT: production
-              run: |
-                  sudo snap install hugo
-                  hugo --minify
+            - name: Compute image tag
+              id: meta
+              run: echo "image_tag=${{ vars.REGISTRY_USER }}/blog/${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
             - name: Build Docker image
-              id: image_tag
-              run: |
-                  docker build -t ${{ env.image_tag }} -t ${{ env.image_tag }}/${GITHUB_SHA::7} .
+              run: docker build -t ${{ steps.meta.outputs.image_tag }} .
+
             - name: Push Docker image
               run: |
-                  docker login -u ${{vars.REGISTRY_USER}} -p ${{secrets.ACCESS_TOKEN}}
-                  docker push --all-tags ${{ env.image_tag }}
+                  docker login -u ${{ vars.REGISTRY_USER }} -p ${{ secrets.ACCESS_TOKEN }}
+                  docker push ${{ steps.meta.outputs.image_tag }}
 
     deploy:
         needs: build
-        runs-on: ubuntu-latest
-        steps:
-            - name: Deploy to Server
-              run: |
-                  echo "Deploying image ${{ env.image_tag }} to server..."
+        uses: hanatole/deployment/.github/workflows/ci.yml@main
+        with:
+            service_name: blog
+            docker_image: ${{ needs.build.outputs.image_tag }}
+        secrets: inherit
