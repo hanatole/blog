@@ -16,14 +16,21 @@ jobs:
             image_tag: ${{ steps.meta.outputs.image_tag }}
         steps:
             - uses: actions/checkout@v6.0.1
+              with:
+                  submodules: recursive
 
             - name: Compute image tag
               id: meta
               run: echo "image_tag=${{ vars.REGISTRY_USER }}/blog:${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
+            - name: Set up Hugo
+              uses: peaceiris/actions-hugo@v3.0.0
+              with:
+                  hugo-version: "0.152.2"
+                  extended: true
+
             - name: Build blog and package Docker image
               run: |
-                  sudo snap install hugo
                   hugo --minify
                   ls -lha public/
                   test -f public/index.html
