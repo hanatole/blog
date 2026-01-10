@@ -31,6 +31,10 @@ jobs:
         needs: build
         uses: hanatole/deployment/.github/workflows/cd.yml@main
         with:
+            project_directory: /srv/blog
+            traefik_rule: "Host(`ah.imc.chillo.fr`)"
+            network_name: traefiknetwork
             service_name: blog
+            service_port: 80
             docker_image: ${{ needs.build.outputs.image_tag }}
         secrets: inherit
