@@ -15,6 +15,13 @@ jobs:
         steps:
             - uses: actions/checkout@v6.0.1
 
+            - name: Publish the blog
+              env:
+                  HUGO_ENV: production
+              run: |
+                  sudo snap install hugo
+                  hugo --minify
+
             - name: Compute image tag
               id: meta
               run: echo "image_tag=${{ vars.REGISTRY_USER }}/blog/${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
