@@ -31,7 +31,7 @@ jobs:
 
             - name: Build blog and package Docker image
               run: |
-                  hugo --minify
+                  hugo
                   ls -lha public/
                   test -f public/index.html
                   docker build -t ${{ steps.meta.outputs.image_tag }} .
