@@ -1,6 +1,6 @@
 name: Continuous Integration
 on:
-    push:
+    pull_request:
         branches:
             - main
 env:
@@ -15,9 +15,11 @@ jobs:
                   submodules: "true"
 
             - name: Publish blog
+              env:
+                  HUGO_ENVIRONMENT: production
               run: |
                   sudo snap install hugo
-                  hugo
+                  hugo --minify
 
             - name: Build Docker image
               id: image_tag
