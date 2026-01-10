@@ -7,3 +7,4 @@ title: 'Second'
 ## Introduction
 
 This is the content of the second post.
+Thanks!
