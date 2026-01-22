@@ -1,0 +1,6 @@
+.github/
+.gitignore
+.gitmodules
+.Dockerfile
+.Dockerfile1
+nginx.conf
