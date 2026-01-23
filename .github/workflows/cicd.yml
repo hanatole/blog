@@ -24,7 +24,7 @@ jobs:
               run: |
                   SHA="${{ github.sha }}"
                   test -n "$SHA"
-                  echo "tag=${{ vars.REGISTRY_USER }}/${{ vars.PROJECT }}:${SHA::7}" >> $GITHUB_OUTPUT
+                  echo "tag=${{ vars.REGISTRY }}/${{ vars.PROJECT }}:${SHA::7}" >> $GITHUB_OUTPUT
 
             - name: Login to docker registry
               uses: docker/login-action@v3
@@ -36,7 +36,6 @@ jobs:
             - name: Build blog
               run: |
                   hugo
-                  ls -al
 
             - name: Build and push Docker image
               uses: docker/build-push-action@v6
