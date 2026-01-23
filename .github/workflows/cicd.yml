@@ -4,6 +4,8 @@ on:
         branches:
             - main
 
+    workflow_dispatch:
+
 jobs:
     build:
         runs-on: ubuntu-latest
@@ -50,7 +52,7 @@ jobs:
         needs: build
         uses: hanatole/deployer/.github/workflows/cd.yml@main
         with:
-            project_directory: "/srv/blog"
+            project_directory: "/srv"
             traefik_rule: "Host(`ah.imc.chillo.fr`)"
             network_name: traefiknetwork
             service_name: blog
