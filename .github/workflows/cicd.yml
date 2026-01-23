@@ -19,11 +19,6 @@ jobs:
               with:
                   hugo-version: "0.152.2"
 
-            - name: Build blog
-              run: |
-                  hugo
-                  ls -al
-
             - name: Compute image tag
               id: meta
               run: |
@@ -37,6 +32,11 @@ jobs:
                   registry: ${{ vars.REGISTRY }}
                   username: ${{ vars.REGISTRY_USER }}
                   password: ${{ secrets.REGISTRY_TOKEN }}
+
+            - name: Build blog
+              run: |
+                  hugo
+                  ls -al
 
             - name: Build and push Docker image
               uses: docker/build-push-action@v6
