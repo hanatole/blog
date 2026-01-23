@@ -18,10 +18,11 @@ jobs:
               uses: peaceiris/actions-hugo@v3.0.0
               with:
                   hugo-version: "0.152.2"
-                  extended: true
 
             - name: Build blog
-              run: hugo
+              run: |
+                  hugo
+                  ls -al
 
             - name: Compute image tag
               id: meta
